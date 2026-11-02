@@ -1,28 +1,39 @@
-from datetime import date
-from pydantic import BaseModel, ConfigDict
+# schemas.py
+from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel
 
 
-class DocumentCreate(BaseModel):
-    document_type: str
-    document_number: str | None = None
-    first_name: str | None = None
-    last_name: str | None = None
-    image_path: str | None = None
-    dob: date | None = None
-    issue_date: date | None = None
-    exp_date: date | None = None
-    street_address: str | None = None
-    city: str | None = None
-    state: str | None = None
-    zip_code: str | None = None
-    sex: str | None = None
-    eye_color: str | None = None
-    hair_color: str | None = None
-    weight: str | None = None
-    height: str | None = None
+class UserCreate(BaseModel):
+  username: str
+  email: str
+  password: str
 
 
-class DocumentResponse(DocumentCreate):
-    document_id: int
+class UserResponse(BaseModel):
+  user_id: int
+  username: str
+  email: str
+  created_at: datetime
 
-    model_config = ConfigDict(from_attributes=True)
+  class Config:
+    from_attributes = True
+
+
+class UserUpdate(BaseModel):
+  username: Optional[str] = None
+  email: Optional[str] = None
+
+
+class PasswordChange(BaseModel):
+  current_password: str
+  new_password: str
+
+
+class ForgotPasswordRequest(BaseModel):
+  email: str
+
+
+class ResetPasswordRequest(BaseModel):
+  token: str
+  new_password: str
